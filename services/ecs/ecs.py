@@ -1,0 +1,4 @@
+class Ecs:
+    """ """
+
+    pass
