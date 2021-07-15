@@ -33,6 +33,7 @@ jobs:
         pipenv check
     - name: Unit Tests and Coverage Report
       run: |
+        export PYTHONPATH="$PWD"
         pytest -n 6 --cov=./
     - name: Mypy
       run: |
