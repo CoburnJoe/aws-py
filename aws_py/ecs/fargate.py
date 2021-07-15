@@ -2,11 +2,11 @@ import os
 import requests
 import json
 
-from aws_py.aws_py import AwsPy
+from aws_py import AwsPy
 from typing import Any
 
 
-class EcsFargate(AwsPy):
+class Fargate(AwsPy):
     """
     Utilities for working with containers running on Fargate backed ECS
     NOT suitable for use with ECS tasks running on EC2 instances

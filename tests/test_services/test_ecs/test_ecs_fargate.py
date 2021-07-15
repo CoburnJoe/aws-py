@@ -2,7 +2,7 @@ import pytest
 import json
 import requests
 
-from services.ecs import EcsFargate
+from aws_py.ecs import Fargate
 from unittest.mock import patch
 
 
@@ -11,7 +11,7 @@ def test_get_container_metadata_v4_successful(requests_get_function):
     requests_get_function.return_value = type(
         "fake_request", (), {"json": lambda: json.dumps({"A": "B"}), "status_code": 200}
     )
-    result = EcsFargate().get_container_metadata_v4()
+    result = Fargate().get_container_metadata_v4()
     assert result == {"A": "B"}
 
 
@@ -21,7 +21,7 @@ def test_get_container_metadata_v4_failed_bad_json_raise_errors(requests_get_fun
         "fake_request", (), {"json": lambda: "abc", "status_code": 200}
     )
     with pytest.raises(json.decoder.JSONDecodeError):
-        EcsFargate(raise_errors=True).get_container_metadata_v4()
+        Fargate(raise_errors=True).get_container_metadata_v4()
 
 
 @patch("requests.get")
@@ -31,7 +31,7 @@ def test_get_container_metadata_v4_failed_bad_json_swallow_errors(
     requests_get_function.return_value = type(
         "fake_request", (), {"json": lambda: "abc", "status_code": 200}
     )
-    result = EcsFargate(raise_errors=False).get_container_metadata_v4()
+    result = Fargate(raise_errors=False).get_container_metadata_v4()
     assert result == {}
 
 
@@ -43,7 +43,7 @@ def test_get_container_metadata_v4_raises_invalid_status_code(requests_get_funct
         {"json": lambda: "abc", "status_code": 401, "text": lambda: "abc"},
     )
     with pytest.raises(RuntimeError):
-        EcsFargate(raise_errors=True).get_container_metadata_v4()
+        Fargate(raise_errors=True).get_container_metadata_v4()
 
 
 @pytest.mark.parametrize(
@@ -62,7 +62,7 @@ def test_get_container_metadata_v4_handles_http_exceptions(
 ):
     requests_get_function.side_effect = exception
     with pytest.raises(exception):
-        EcsFargate(raise_errors=True).get_container_metadata_v4()
+        Fargate(raise_errors=True).get_container_metadata_v4()
 
-    result_no_raise = EcsFargate(raise_errors=False).get_container_metadata_v4()
+    result_no_raise = Fargate(raise_errors=False).get_container_metadata_v4()
     assert result_no_raise == {}
