@@ -6,7 +6,7 @@ Requires Fargate platform version 1.4.0 for some functions.
 # Usage
 
 ```python
-from aws_py.ecs import Fargate
+from awspy.ecs import Fargate
 
 Fargate().get_container_metadata_v4()
 ```
