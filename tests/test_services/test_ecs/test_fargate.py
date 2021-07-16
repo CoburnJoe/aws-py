@@ -2,14 +2,14 @@ import pytest
 import json
 import requests
 
-from aws_py.ecs import Fargate
+from awspy.ecs import Fargate
 from unittest.mock import patch
 
 
 @patch("requests.get")
 def test_get_container_metadata_v4_successful(requests_get_function):
     requests_get_function.return_value = type(
-        "fake_request", (), {"json": lambda: json.dumps({"A": "B"}), "status_code": 200}
+        "fake_request", (), {"text": json.dumps({"A": "B"}), "status_code": 200}
     )
     result = Fargate().get_container_metadata_v4()
     assert result == {"A": "B"}
@@ -18,7 +18,7 @@ def test_get_container_metadata_v4_successful(requests_get_function):
 @patch("requests.get")
 def test_get_container_metadata_v4_failed_bad_json_raise_errors(requests_get_function):
     requests_get_function.return_value = type(
-        "fake_request", (), {"json": lambda: "abc", "status_code": 200}
+        "fake_request", (), {"text": "abc", "status_code": 200}
     )
     with pytest.raises(json.decoder.JSONDecodeError):
         Fargate(raise_errors=True).get_container_metadata_v4()
@@ -28,9 +28,7 @@ def test_get_container_metadata_v4_failed_bad_json_raise_errors(requests_get_fun
 def test_get_container_metadata_v4_failed_bad_json_swallow_errors(
     requests_get_function,
 ):
-    requests_get_function.return_value = type(
-        "fake_request", (), {"json": lambda: "abc", "status_code": 200}
-    )
+    requests_get_function.return_value = type("fake_request", (), {"status_code": 200})
     result = Fargate(raise_errors=False).get_container_metadata_v4()
     assert result == {}
 
@@ -40,7 +38,7 @@ def test_get_container_metadata_v4_raises_invalid_status_code(requests_get_funct
     requests_get_function.return_value = type(
         "fake_request",
         (),
-        {"json": lambda: "abc", "status_code": 401, "text": lambda: "abc"},
+        {"status_code": 401, "text": lambda: "abc"},
     )
     with pytest.raises(RuntimeError):
         Fargate(raise_errors=True).get_container_metadata_v4()

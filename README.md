@@ -5,6 +5,7 @@ services such as [Boto3](https://github.com/boto/boto3) - the Python AWS SDK.
 # Features
 ## Fargate Backed ECS
 - Tooling to extract container metadata, stats, and task information
+- [Fargate Readme](https://github.com/ScholarPack/awspy/blob/main/awspy/ecs/README.MD)
 
 # Installation
 
@@ -19,7 +20,7 @@ pip install awspy
 Import the service, then run commands:
 
 ```python
-from aws_py.ecs import Fargate
+from awspy.ecs import Fargate
 
 Fargate().get_container_metadata_v4()
 ```
@@ -28,7 +29,7 @@ Each service is initialised in a common way. You can pass configuration options 
 initialisation (and if no options are provided then all options revert to their defaults):
 
 ```python
-from aws_py.ecs import Fargate
+from awspy.ecs import Fargate
 
 Fargate(raise_errors=False, logger=my_logger)
 ```
@@ -38,7 +39,7 @@ The options available for all services are:
 |Option|Type|Description|Default|
 |------|----|-----------|-------|
 |raise_errors|Boolean|Should exceptions bubble up?|True|
-|logger|Python logger|A Python logger instance to log information and errors to|Python logger (`logging.getLogger(__name__)`)|
+|logger|Python logger|A Python logger instance to log information and errors to.|Python logger (`logging.getLogger(__name__)`)|
 
 # Useful Links
 

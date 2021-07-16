@@ -2,7 +2,7 @@ import os
 import requests
 import json
 
-from aws_py import AwsPy
+from awspy import AwsPy
 from typing import Any
 
 
@@ -38,9 +38,9 @@ class Fargate(AwsPy):
         try:
             request = requests.get(self.ecs_container_metadata_uri_v4, timeout=3)
             if request.status_code == 200:
-                json_metadata: str = request.json()
-                parsed_metadata: dict = json.loads(json_metadata)
-                return parsed_metadata
+                raw_metadata: str = request.text
+                json_metadata: dict = json.loads(raw_metadata)
+                return json_metadata
             else:
                 raise RuntimeError(
                     f"Inappropriate response from metadata endpoint: {request.text}"
